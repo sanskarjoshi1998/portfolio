@@ -1,0 +1,53 @@
+<div class="editor">
+  <h2>Certifications</h2>
+
+  <form (ngSubmit)="save()" class="card form-grid">
+    <div>
+      <label>Certification Name *</label>
+      <input type="text" name="name" [(ngModel)]="form.name" required placeholder="AWS Certified Developer">
+    </div>
+    <div>
+      <label>Issuing Organization</label>
+      <input type="text" name="issuingOrganization" [(ngModel)]="form.issuingOrganization" placeholder="Amazon Web Services">
+    </div>
+    <div>
+      <label>Issue Date</label>
+      <input type="date" name="issueDate" [(ngModel)]="form.issueDate">
+    </div>
+    <div>
+      <label>Expiry Date</label>
+      <input type="date" name="expiryDate" [(ngModel)]="form.expiryDate">
+    </div>
+    <div>
+      <label>Credential ID</label>
+      <input type="text" name="credentialId" [(ngModel)]="form.credentialId">
+    </div>
+    <div>
+      <label>Credential URL</label>
+      <input type="url" name="credentialUrl" [(ngModel)]="form.credentialUrl" placeholder="https://...">
+    </div>
+
+    <div class="full-width actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+        {{ editingId ? 'Update' : 'Add' }} Certification
+      </button>
+      <button type="button" class="btn btn-outline" *ngIf="editingId" (click)="resetForm()">Cancel</button>
+    </div>
+  </form>
+
+  <div class="list">
+    <div class="card list-item" *ngFor="let item of items()">
+      <div>
+        <strong>{{ item.name }}</strong>
+        <p class="muted">{{ item.issuingOrganization }}</p>
+        <p class="muted small">Issued {{ item.issueDate }} {{ item.expiryDate ? '· Expires ' + item.expiryDate : '' }}</p>
+      </div>
+      <div class="item-actions">
+        <a *ngIf="item.credentialUrl" [href]="item.credentialUrl" target="_blank" class="btn btn-outline"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        <button class="btn btn-outline" (click)="edit(item)"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-outline" (click)="remove(item.id)"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <p class="muted" *ngIf="items().length === 0">No certifications added yet.</p>
+  </div>
+</div>

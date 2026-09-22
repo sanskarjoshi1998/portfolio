@@ -1,0 +1,254 @@
+<app-navbar></app-navbar>
+
+<!-- Particle canvas background -->
+<canvas #particleCanvas class="particle-canvas"></canvas>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="home" class="hero">
+  <div class="container hero-inner">
+    <div class="hero-content">
+
+      <div class="availability-badge" appAnimateOnScroll animType="fade-up">
+        <span class="pulse-dot"></span>
+        Available for opportunities
+      </div>
+
+      <h1 appAnimateOnScroll animType="fade-up" [animDelay]="80">
+        Hi, I'm <span class="accent">{{ profile()?.fullName || 'Your Name' }}</span>
+      </h1>
+
+      <div class="typewriter-row" appAnimateOnScroll animType="fade-up" [animDelay]="160">
+        <span class="typed-text">{{ typedText() }}</span>
+        <span class="cursor">|</span>
+      </div>
+
+      <p class="hero-summary" appAnimateOnScroll animType="fade-up" [animDelay]="240">
+        {{ profile()?.summary || 'A passionate developer who builds things that matter.' }}
+      </p>
+
+      <div class="hero-actions" appAnimateOnScroll animType="fade-up" [animDelay]="320">
+        <a href="#contact" class="btn-primary-glow">Let's Connect ↗</a>
+        <a href="#experience" class="btn-outline-dark">View Work ↓</a>
+      </div>
+
+      <div class="hero-meta" appAnimateOnScroll animType="fade-up" [animDelay]="400">
+        @if (profile()?.city) {
+          <span><i class="fa-solid fa-location-dot"></i> {{ profile()?.city }}, {{ profile()?.country }}</span>
+        }
+        @if (profile()?.email) {
+          <span><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</span>
+        }
+      </div>
+
+      @if (socialLinks().length > 0) {
+        <div class="hero-social" appAnimateOnScroll animType="fade-up" [animDelay]="480">
+          @for (link of socialLinks(); track link.id; let i = $index) {
+            <a [href]="link.url" target="_blank" class="social-icon"
+               appAnimateOnScroll animType="scale-in" [animDelay]="500 + i * 80">
+              <i [class]="'fa-brands ' + (link.iconName || 'fa-link')"></i>
+            </a>
+          }
+        </div>
+      }
+    </div>
+
+    @if (profile()?.profileImageUrl) {
+      <div class="hero-avatar" appAnimateOnScroll animType="fade-left" [animDelay]="100">
+        <div class="avatar-ring">
+          <img [src]="profile()?.profileImageUrl" [alt]="profile()?.fullName" />
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="hero-glow-orb"></div>
+</section>
+
+<!-- ══════════ EXPERIENCE ══════════ -->
+<section id="experience" class="section">
+  <div class="container">
+    <div class="section-header" appAnimateOnScroll animType="fade-up">
+      <span class="section-eyebrow" style="color:#5b8cff">Career</span>
+      <h2>Work Experience</h2>
+      <p>Where I've built things that matter</p>
+    </div>
+
+    <div class="timeline">
+      @for (job of experience(); track job.id; let i = $index) {
+        <div class="timeline-item" appAnimateOnScroll animType="fade-left" [animDelay]="i * 120">
+          <div class="timeline-track">
+            <div class="timeline-dot" [class.active]="job.currentlyWorking"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="exp-card">
+            <div class="exp-card-header">
+              <div>
+                <h3>{{ job.jobTitle }}</h3>
+                <p class="exp-company">{{ job.companyName }}{{ job.location ? ' · ' + job.location : '' }}</p>
+              </div>
+              <span class="date-badge">
+                {{ job.currentlyWorking ? 'Present' : formatDate(job.endDate) }}
+              </span>
+            </div>
+            @if (job.description) {
+              <p class="exp-desc">{{ job.description }}</p>
+            }
+          </div>
+        </div>
+      }
+      @if (experience().length === 0) {
+        <p class="empty-state">No experience added yet.</p>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ EDUCATION ══════════ -->
+<section id="education" class="section section-dark">
+  <div class="container">
+    <div class="section-header" appAnimateOnScroll animType="fade-up">
+      <span class="section-eyebrow" style="color:#a78bfa">Academic</span>
+      <h2>Education</h2>
+    </div>
+
+    <div class="cards-grid">
+      @for (edu of education(); track edu.id; let i = $index) {
+        <div class="glow-card" appAnimateOnScroll animType="scale-in" [animDelay]="i * 100">
+          <div class="card-accent" style="color:#a78bfa">{{ edu.fieldOfStudy }}</div>
+          <h3>{{ edu.degree }}</h3>
+          <p class="card-sub">{{ edu.institution }}</p>
+          <div class="card-footer">
+            <span>{{ formatDateRange(edu.startDate, edu.endDate) }}</span>
+            @if (edu.grade) { <span class="grade-badge">{{ edu.grade }}</span> }
+          </div>
+        </div>
+      }
+      @if (education().length === 0) {
+        <p class="empty-state">No education added yet.</p>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SKILLS ══════════ -->
+<section id="skills" class="section">
+  <div class="container">
+    <div class="section-header" appAnimateOnScroll animType="fade-up">
+      <span class="section-eyebrow" style="color:#34d399">Tech Stack</span>
+      <h2>Skills</h2>
+    </div>
+
+    <div class="skills-grid">
+      @for (skill of skills(); track skill.id; let i = $index) {
+        <div class="skill-card" appAnimateOnScroll animType="fade-up" [animDelay]="i * 55">
+          <div class="skill-top">
+            <span class="skill-name">{{ skill.name }}</span>
+            <span class="skill-pct">{{ skill.proficiencyLevel }}%</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill"
+                 [style.width.%]="skill.proficiencyLevel"
+                 [style.background]="getCategoryColor(skill.category || '')">
+            </div>
+          </div>
+          <div class="skill-cat">{{ skill.category }}</div>
+        </div>
+      }
+      @if (skills().length === 0) {
+        <p class="empty-state">No skills added yet.</p>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CERTIFICATIONS ══════════ -->
+<section id="certifications" class="section section-dark">
+  <div class="container">
+    <div class="section-header" appAnimateOnScroll animType="fade-up">
+      <span class="section-eyebrow" style="color:#fb923c">Credentials</span>
+      <h2>Certifications</h2>
+    </div>
+
+    <div class="cards-grid">
+      @for (cert of certifications(); track cert.id; let i = $index) {
+        <div class="glow-card cert-card" appAnimateOnScroll animType="scale-in" [animDelay]="i * 100">
+          <div class="cert-icon">🏆</div>
+          <h3>{{ cert.name }}</h3>
+          <p class="card-sub">{{ cert.issuingOrganization }}</p>
+          @if (cert.issueDate) {
+            <div class="card-footer">
+              <span>Issued {{ formatDate(cert.issueDate) }}</span>
+              @if (cert.credentialUrl) {
+                <a [href]="cert.credentialUrl" target="_blank" class="cred-link">
+                  Verify <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+      @if (certifications().length === 0) {
+        <p class="empty-state">No certifications added yet.</p>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CONTACT ══════════ -->
+<section id="contact" class="section">
+  <div class="container contact-wrap">
+    <div class="section-header" appAnimateOnScroll animType="fade-up">
+      <span class="section-eyebrow" style="color:#5b8cff">Say Hello</span>
+      <h2>Get in Touch</h2>
+      <p>Have an opportunity or just want to connect? I'd love to hear from you.</p>
+    </div>
+
+    <div appAnimateOnScroll animType="fade-up" [animDelay]="120">
+      @if (contactStatus() === 'sent') {
+        <div class="contact-success">
+          <div class="success-icon">✉️</div>
+          <h3>Message sent!</h3>
+          <p>Thanks for reaching out — I'll get back to you soon.</p>
+        </div>
+      } @else {
+        <form class="contact-form" (ngSubmit)="submitContact()">
+          <div class="form-row">
+            <div class="form-field">
+              <label>Your name</label>
+              <input type="text" [(ngModel)]="contactForm.senderName" name="senderName"
+                     placeholder="John Doe" required />
+            </div>
+            <div class="form-field">
+              <label>Your email</label>
+              <input type="email" [(ngModel)]="contactForm.senderEmail" name="senderEmail"
+                     placeholder="john@example.com" required />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Message</label>
+            <textarea [(ngModel)]="contactForm.message" name="message"
+                      rows="5" placeholder="Your message..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary-glow full-width"
+                  [disabled]="contactStatus() === 'sending'">
+            @if (contactStatus() === 'sending') {
+              <i class="fa-solid fa-circle-notch fa-spin"></i> Sending...
+            } @else {
+              Send Message ↗
+            }
+          </button>
+          @if (contactStatus() === 'error') {
+            <p class="form-error">Something went wrong. Please try again.</p>
+          }
+        </form>
+      }
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© {{ currentYear }} {{ profile()?.fullName || 'Portfolio' }} — Built with Spring Boot & Angular</span>
+    <a routerLink="/admin/login" class="admin-link">Admin</a>
+  </div>
+</footer>

@@ -1,0 +1,58 @@
+<div class="editor">
+  <h2>Experience</h2>
+
+  <form (ngSubmit)="save()" class="card form-grid">
+    <div>
+      <label>Company Name *</label>
+      <input type="text" name="companyName" [(ngModel)]="form.companyName" required>
+    </div>
+    <div>
+      <label>Job Title</label>
+      <input type="text" name="jobTitle" [(ngModel)]="form.jobTitle" placeholder="Software Engineer">
+    </div>
+    <div>
+      <label>Location</label>
+      <input type="text" name="location" [(ngModel)]="form.location" placeholder="Indore, India">
+    </div>
+    <div class="checkbox-row">
+      <label class="inline">
+        <input type="checkbox" name="currentlyWorking" [(ngModel)]="form.currentlyWorking">
+        I currently work here
+      </label>
+    </div>
+    <div>
+      <label>Start Date</label>
+      <input type="date" name="startDate" [(ngModel)]="form.startDate">
+    </div>
+    <div *ngIf="!form.currentlyWorking">
+      <label>End Date</label>
+      <input type="date" name="endDate" [(ngModel)]="form.endDate">
+    </div>
+    <div class="full-width">
+      <label>Description</label>
+      <textarea name="description" [(ngModel)]="form.description" rows="3"></textarea>
+    </div>
+
+    <div class="full-width actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+        {{ editingId ? 'Update' : 'Add' }} Experience
+      </button>
+      <button type="button" class="btn btn-outline" *ngIf="editingId" (click)="resetForm()">Cancel</button>
+    </div>
+  </form>
+
+  <div class="list">
+    <div class="card list-item" *ngFor="let item of items()">
+      <div>
+        <strong>{{ item.jobTitle }}</strong>
+        <p class="muted">{{ item.companyName }} {{ item.location ? '· ' + item.location : '' }}</p>
+        <p class="muted small">{{ item.startDate }} – {{ item.currentlyWorking ? 'Present' : (item.endDate || '') }}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline" (click)="edit(item)"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-outline" (click)="remove(item.id)"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <p class="muted" *ngIf="items().length === 0">No experience entries yet.</p>
+  </div>
+</div>

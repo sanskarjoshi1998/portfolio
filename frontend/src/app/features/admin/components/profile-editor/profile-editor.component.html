@@ -1,0 +1,162 @@
+<div class="panel-header">
+  <div>
+    <h2>Profile</h2>
+    <p>The "who I am" info shown at the top of your portfolio site</p>
+  </div>
+</div>
+
+<!-- Loading state -->
+@if (isLoading()) {
+  <div class="loading-state">
+    <i class="fa-solid fa-circle-notch fa-spin"></i>
+    <span>Loading profile...</span>
+  </div>
+}
+
+<!-- Error loading (still show form so user can try saving) -->
+@if (!isLoading() && loadError()) {
+  <div class="alert alert-warning">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    Could not load your saved profile. You can still fill in the form and save.
+  </div>
+}
+
+<!-- Profile form — shown once loading is done -->
+@if (!isLoading()) {
+  <form (ngSubmit)="save()">
+    <div class="form-grid">
+
+      <!-- Full Name -->
+      <div class="full-width">
+        <label for="fullName">Full name <span class="required">*</span></label>
+        <input
+          id="fullName"
+          type="text"
+          [(ngModel)]="profile.fullName"
+          name="fullName"
+          required
+          placeholder="e.g. Rahul Sharma"
+        />
+      </div>
+
+      <!-- Professional Title -->
+      <div class="full-width">
+        <label for="title">Professional title</label>
+        <input
+          id="title"
+          type="text"
+          [(ngModel)]="profile.title"
+          name="title"
+          placeholder="e.g. Full Stack Developer"
+        />
+      </div>
+
+      <!-- Summary / Bio -->
+      <div class="full-width">
+        <label for="summary">Summary / Bio</label>
+        <textarea
+          id="summary"
+          rows="5"
+          [(ngModel)]="profile.summary"
+          name="summary"
+          placeholder="A short bio about who you are — this is your 'About Me' shown on the homepage."
+        ></textarea>
+      </div>
+
+      <!-- City -->
+      <div>
+        <label for="city">City</label>
+        <input
+          id="city"
+          type="text"
+          [(ngModel)]="profile.city"
+          name="city"
+          placeholder="e.g. Indore"
+        />
+      </div>
+
+      <!-- Country -->
+      <div>
+        <label for="country">Country</label>
+        <input
+          id="country"
+          type="text"
+          [(ngModel)]="profile.country"
+          name="country"
+          placeholder="e.g. India"
+        />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email">Contact email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="profile.email"
+          name="email"
+          placeholder="rahul@example.com"
+        />
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label for="phone">Phone number</label>
+        <input
+          id="phone"
+          type="text"
+          [(ngModel)]="profile.phone"
+          name="phone"
+          placeholder="+91 98765 43210"
+        />
+      </div>
+
+      <!-- Profile Image URL -->
+      <div class="full-width">
+        <label for="profileImageUrl">Profile photo URL</label>
+        <input
+          id="profileImageUrl"
+          type="url"
+          [(ngModel)]="profile.profileImageUrl"
+          name="profileImageUrl"
+          placeholder="https://..."
+        />
+        @if (profile.profileImageUrl) {
+          <div class="image-preview">
+            <img [src]="profile.profileImageUrl" alt="Profile preview" (error)="profile.profileImageUrl = ''" />
+          </div>
+        }
+      </div>
+
+      <!-- Resume PDF URL -->
+      <div class="full-width">
+        <label for="resumeFileUrl">Resume PDF URL</label>
+        <input
+          id="resumeFileUrl"
+          type="url"
+          [(ngModel)]="profile.resumeFileUrl"
+          name="resumeFileUrl"
+          placeholder="https://... (link to your downloadable resume PDF)"
+        />
+      </div>
+
+    </div>
+
+    <!-- Save button + feedback -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving() || !profile.fullName || profile.fullName.trim().length === 0">
+        @if (isSaving()) {
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Saving...
+        } @else {
+          <i class="fa-solid fa-floppy-disk"></i> Save profile
+        }
+      </button>
+
+      @if (savedRecently()) {
+        <span class="save-toast">
+          <i class="fa-solid fa-circle-check"></i> Saved successfully
+        </span>
+      }
+    </div>
+  </form>
+}

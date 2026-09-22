@@ -1,0 +1,39 @@
+<div class="editor">
+  <h2>Social Links</h2>
+
+  <form (ngSubmit)="save()" class="card form-grid">
+    <div>
+      <label>Platform *</label>
+      <input type="text" name="platform" [(ngModel)]="form.platform" required placeholder="LinkedIn">
+    </div>
+    <div>
+      <label>URL *</label>
+      <input type="url" name="url" [(ngModel)]="form.url" required placeholder="https://linkedin.com/in/you">
+    </div>
+    <div>
+      <label>Icon Name</label>
+      <input type="text" name="iconName" [(ngModel)]="form.iconName" placeholder="fa-linkedin">
+    </div>
+
+    <div class="full-width actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+        {{ editingId ? 'Update' : 'Add' }} Link
+      </button>
+      <button type="button" class="btn btn-outline" *ngIf="editingId" (click)="resetForm()">Cancel</button>
+    </div>
+  </form>
+
+  <div class="list">
+    <div class="card list-item" *ngFor="let item of items()">
+      <div>
+        <strong>{{ item.platform }}</strong>
+        <p class="muted small">{{ item.url }}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline" (click)="edit(item)"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-outline" (click)="remove(item.id)"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <p class="muted" *ngIf="items().length === 0">No social links added yet.</p>
+  </div>
+</div>

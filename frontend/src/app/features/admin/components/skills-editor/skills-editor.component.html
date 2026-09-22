@@ -1,0 +1,39 @@
+<div class="editor">
+  <h2>Skills</h2>
+
+  <form (ngSubmit)="save()" class="card form-grid">
+    <div>
+      <label>Skill Name *</label>
+      <input type="text" name="name" [(ngModel)]="form.name" required placeholder="Spring Boot">
+    </div>
+    <div>
+      <label>Category</label>
+      <input type="text" name="category" [(ngModel)]="form.category" placeholder="Backend">
+    </div>
+    <div class="full-width">
+      <label>Proficiency: {{ form.proficiencyLevel }}%</label>
+      <input type="range" name="proficiencyLevel" [(ngModel)]="form.proficiencyLevel" min="0" max="100">
+    </div>
+
+    <div class="full-width actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+        {{ editingId ? 'Update' : 'Add' }} Skill
+      </button>
+      <button type="button" class="btn btn-outline" *ngIf="editingId" (click)="resetForm()">Cancel</button>
+    </div>
+  </form>
+
+  <div class="list">
+    <div class="card list-item" *ngFor="let item of items()">
+      <div>
+        <strong>{{ item.name }}</strong>
+        <p class="muted">{{ item.category }} · {{ item.proficiencyLevel }}%</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline" (click)="edit(item)"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-outline" (click)="remove(item.id)"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <p class="muted" *ngIf="items().length === 0">No skills added yet.</p>
+  </div>
+</div>

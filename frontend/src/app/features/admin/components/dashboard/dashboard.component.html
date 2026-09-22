@@ -1,0 +1,40 @@
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Admin</h2>
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (tab of tabs; track tab.id) {
+        <button
+          class="nav-item"
+          [class.active]="activeTab() === tab.id"
+          (click)="selectTab(tab.id)">
+          <i class="fa-solid {{ tab.icon }}"></i>
+          {{ tab.label }}
+        </button>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-action" (click)="viewSite()">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> View site
+      </button>
+      <button class="sidebar-action logout" (click)="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="content">
+    @switch (activeTab()) {
+      @case ('profile') { <app-profile-editor></app-profile-editor> }
+      @case ('experience') { <app-experience-editor></app-experience-editor> }
+      @case ('education') { <app-education-editor></app-education-editor> }
+      @case ('skills') { <app-skills-editor></app-skills-editor> }
+      @case ('certifications') { <app-certifications-editor></app-certifications-editor> }
+      @case ('social') { <app-social-links-editor></app-social-links-editor> }
+      @case ('messages') { <app-messages></app-messages> }
+    }
+  </main>
+</div>

@@ -1,0 +1,21 @@
+<div class="editor">
+  <h2>Contact Messages</h2>
+
+  <div class="list">
+    <div class="card list-item message-item" *ngFor="let msg of messages()" [class.unread]="!msg.read" (click)="markRead(msg)">
+      <div>
+        <div class="message-header">
+          <strong>{{ msg.senderName }}</strong>
+          <span class="muted small">{{ msg.senderEmail }}</span>
+          <span class="badge" *ngIf="!msg.read">NEW</span>
+        </div>
+        <p class="muted small">{{ msg.submittedAt }}</p>
+        <p class="message-body">{{ msg.message }}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline" (click)="remove(msg.id); $event.stopPropagation()"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <p class="muted" *ngIf="messages().length === 0">No messages received yet.</p>
+  </div>
+</div>
